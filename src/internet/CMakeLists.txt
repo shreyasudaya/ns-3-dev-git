@@ -86,6 +86,7 @@ set(source_files
     model/rtt-estimator.cc
     model/tcp-bbr.cc
     model/tcp-bic.cc
+    model/tcp-compound.cc
     model/tcp-congestion-ops.cc
     model/tcp-cubic.cc
     model/tcp-dctcp.cc
@@ -212,6 +213,7 @@ set(header_files
     model/rtt-estimator.h
     model/tcp-bbr.h
     model/tcp-bic.h
+    model/tcp-compound.h
     model/tcp-congestion-ops.h
     model/tcp-cubic.h
     model/tcp-dctcp.h
@@ -294,6 +296,7 @@ set(test_sources
     test/tcp-bbr-test.cc
     test/tcp-bic-test.cc
     test/tcp-bytes-in-flight-test.cc
+    test/tcp-compound-test.cc
     test/tcp-classic-recovery-test.cc
     test/tcp-close-test.cc
     test/tcp-cong-avoid-test.cc

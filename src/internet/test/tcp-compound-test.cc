@@ -30,7 +30,7 @@
 
 using namespace ns3;
 
-NS_LOG_COMPONENT_DEFINE ("TcpCompoundTestSuite");
+NS_LOG_COMPONENT_DEFINE("TcpCompoundTestSuite");
 
 /**
  * \brief TcpCompound congestion control algorithm test
@@ -141,9 +141,9 @@ TcpCompoundTest::DoRun ()
   // Our calculation of cwnd
   IncreaseWindow (cong);
 
-  NS_TEST_ASSERT_MSG_EQ (m_state->m_cWnd.Get (), m_cWnd,
+  NS_TEST_ASSERT_MSG_EQ(m_state->m_cWnd.Get (), m_cWnd,
                          "CWnd has not updated correctly");
-  NS_TEST_ASSERT_MSG_EQ (m_state->m_ssThresh.Get (), m_ssThresh,
+  NS_TEST_ASSERT_MSG_EQ(m_state->m_ssThresh.Get (), m_ssThresh,
                          "SsThresh has not updated correctly");
 }
 

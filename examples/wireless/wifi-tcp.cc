@@ -84,7 +84,7 @@ main(int argc, char* argv[])
     cmd.AddValue("payloadSize", "Payload size in bytes", payloadSize);
     cmd.AddValue("dataRate", "Application data ate", dataRate);
     cmd.AddValue("tcpVariant",
-                 "Transport protocol to use: TcpNewReno, "
+                 "Transport protocol to use: TcpCompound, TcpNewReno, "
                  "TcpHybla, TcpHighSpeed, TcpHtcp, TcpVegas, TcpScalable, TcpVeno, "
                  "TcpBic, TcpYeah, TcpIllinois, TcpWestwood, TcpWestwoodPlus, TcpLedbat ",
                  tcpVariant);

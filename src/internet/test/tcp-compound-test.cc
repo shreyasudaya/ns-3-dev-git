@@ -51,7 +51,7 @@ public:
    * \param lastAckedSeq Last ACKed sequence number.
    * \param name Test description.
    */
-  TcpCompoundTest (uint32_t cWnd,
+  TcpCompoundTest(uint32_t cWnd,
                    uint32_t lwnd,
                    uint32_t dwnd,
                    uint32_t segmentSize,
@@ -63,17 +63,17 @@ public:
                    const std::string &name);
 
 private:
-  void DoRun (void) override ;
+  void DoRun() override ;
   /**
    * \brief Increases the TCP window.
    * \param cong The congestion control.
    */
-  void IncreaseWindow (Ptr<TcpCompound> cong);
+  void IncreaseWindow(Ptr<TcpCompound> cong);
   /**
    * brief Get and check the SSH threshold.
    * \param cong The congestion control.
    */
-  void GetSsThresh (Ptr<TcpCompound> cong);
+  void GetSsThresh(Ptr<TcpCompound> cong);
 
   uint32_t m_cWnd;        //!< Congestion window.
   uint32_t m_lwnd;        //!< Loss-based Congestion window.
@@ -88,7 +88,7 @@ private:
   Ptr<TcpSocketState> m_state;  //!< TCP socket state.
 };
 
-TcpCompoundTest::TcpCompoundTest (uint32_t cWnd,
+TcpCompoundTest::TcpCompoundTest(uint32_t cWnd,
                                   uint32_t lwnd,
                                   uint32_t dwnd,
                                   uint32_t segmentSize,
@@ -98,23 +98,23 @@ TcpCompoundTest::TcpCompoundTest (uint32_t cWnd,
                                   SequenceNumber32 nextTxSeq,
                                   SequenceNumber32 lastAckedSeq,
                                   const std::string &name)
-  : TestCase (name),
-    m_cWnd (cWnd),
-    m_lwnd (lwnd),
-    m_dwnd (dwnd),
-    m_segmentSize (segmentSize),
-    m_ssThresh (ssThresh),
-    m_rtt (rtt),
-    m_segmentsAcked (segmentsAcked),
-    m_nextTxSeq (nextTxSeq),
-    m_lastAckedSeq (lastAckedSeq)
+  : TestCase(name),
+    m_cWnd(cWnd),
+    m_lwnd(lwnd),
+    m_dwnd(dwnd),
+    m_segmentSize(segmentSize),
+    m_ssThresh(ssThresh),
+    m_rtt(rtt),
+    m_segmentsAcked(segmentsAcked),
+    m_nextTxSeq(nextTxSeq),
+    m_lastAckedSeq(lastAckedSeq)
 {
 }
 
 void
-TcpCompoundTest::DoRun ()
+TcpCompoundTest::DoRun()
 {
-  m_state = CreateObject<TcpSocketState> ();
+  m_state = CreateObject<TcpSocketState>();
 
   m_state->m_cWnd = m_cWnd;
   m_state->m_segmentSize = m_segmentSize;
@@ -122,40 +122,40 @@ TcpCompoundTest::DoRun ()
   m_state->m_nextTxSequence = m_nextTxSeq;
   m_state->m_lastAckedSeq = m_lastAckedSeq;
 
-  Ptr<TcpCompound> cong = CreateObject <TcpCompound> ();
+  Ptr<TcpCompound> cong = CreateObject<TcpCompound>();
 
   // Set baseRtt to 100 ms
-  cong->PktsAcked (m_state, m_segmentsAcked, MilliSeconds (100));
+  cong->PktsAcked(m_state, m_segmentsAcked, MilliSeconds(100));
 
   // Re-set Compound to assign a new value of minRtt
-  cong->CongestionStateSet (m_state, TcpSocketState::CA_OPEN);
-  cong->PktsAcked (m_state, m_segmentsAcked, m_rtt);
+  cong->CongestionStateSet(m_state, TcpSocketState::CA_OPEN);
+  cong->PktsAcked(m_state, m_segmentsAcked, m_rtt);
 
   // 2 more calls to PktsAcked to increment cntRtt beyond 2
-  cong->PktsAcked (m_state, m_segmentsAcked, m_rtt);
-  cong->PktsAcked (m_state, m_segmentsAcked, m_rtt);
+  cong->PktsAcked(m_state, m_segmentsAcked, m_rtt);
+  cong->PktsAcked(m_state, m_segmentsAcked, m_rtt);
 
   // Update cwnd using Compound algorithm
-  cong->IncreaseWindow (m_state, m_segmentsAcked);
+  cong->IncreaseWindow(m_state, m_segmentsAcked);
 
   // Our calculation of cwnd
-  IncreaseWindow (cong);
+  IncreaseWindow(cong);
 
-  NS_TEST_ASSERT_MSG_EQ(m_state->m_cWnd.Get (), m_cWnd,
+  NS_TEST_ASSERT_MSG_EQ(m_state->m_cWnd.Get(), m_cWnd,
                          "CWnd has not updated correctly");
-  NS_TEST_ASSERT_MSG_EQ(m_state->m_ssThresh.Get (), m_ssThresh,
+  NS_TEST_ASSERT_MSG_EQ(m_state->m_ssThresh.Get(), m_ssThresh,
                          "SsThresh has not updated correctly");
 }
 
 void
-TcpCompoundTest::IncreaseWindow (Ptr<TcpCompound> cong)
+TcpCompoundTest::IncreaseWindow(Ptr<TcpCompound> cong)
 {
-  Time baseRtt = MilliSeconds (100);
-  uint32_t segCwnd = m_cWnd / m_segmentSize;
+  Time baseRtt = MilliSeconds(100);
+  uint32_t segCwnd = m_cWnd/m_segmentSize;
 
   // Calculate expected throughput
   uint64_t expectedCwnd;
-  expectedCwnd = (uint64_t) segCwnd * (double) baseRtt.GetMilliSeconds () / (double) m_rtt.GetMilliSeconds ();
+  expectedCwnd = (uint64_t)segCwnd * (double)baseRtt.GetMilliSeconds() / (double)m_rtt.GetMilliSeconds();
 
   // Calculate the difference between actual and expected throughput
   uint32_t diff;
@@ -164,39 +164,39 @@ TcpCompoundTest::IncreaseWindow (Ptr<TcpCompound> cong)
   // Get the alpha,beta, k, eta and gamma attributes
   DoubleValue alpha, beta, k, eta;
   UintegerValue gamma;
-  cong->GetAttribute ("Alpha", alpha);
-  cong->GetAttribute ("Beta", beta);
-  cong->GetAttribute ("k", k);
-  cong->GetAttribute ("eta", eta);
-  cong->GetAttribute ("Gamma", gamma);
+  cong->GetAttribute("Alpha", alpha);
+  cong->GetAttribute("Beta", beta);
+  cong->GetAttribute("k", k);
+  cong->GetAttribute("eta", eta);
+  cong->GetAttribute("Gamma", gamma);
 
-  if ((m_cWnd < m_ssThresh) && (diff < gamma.Get ()))
+  if((m_cWnd < m_ssThresh) && (diff < gamma.Get()))
     { // Execute Reno slow start
-      if (m_segmentsAcked >= 1)
+      if(m_segmentsAcked >= 1)
         {
           m_cWnd += m_segmentSize;
           m_segmentsAcked--;
         }
     }
-  else if (diff < gamma.Get ())
+  else if(diff < gamma.Get())
     {
-      m_cWnd += static_cast<uint32_t> (alpha.Get () * pow (m_cWnd, k.Get ()));
+      m_cWnd += static_cast<uint32_t>(alpha.Get() * pow(m_cWnd, k.Get()));
 
-      double adder = static_cast<double> (m_segmentSize * m_segmentSize) / m_cWnd;
-      adder = std::max (1.0, adder);
-      m_lwnd += static_cast<uint32_t> (adder);
+      double adder = static_cast<double>(m_segmentSize * m_segmentSize) / m_cWnd;
+      adder = std::max(1.0, adder);
+      m_lwnd += static_cast<uint32_t>(adder);
 
       m_dwnd = m_cWnd - m_lwnd;
     }
-  else if (diff >= gamma.Get ())
+  else if(diff >= gamma.Get())
     {
-      double adder = static_cast<double> (m_segmentSize * m_segmentSize) / m_cWnd;
-      adder = std::max (1.0, adder);
+      double adder = static_cast<double> ((m_segmentSize * m_segmentSize) / m_cWnd);
+      adder = std::max(1.0, adder);
 
       m_lwnd += static_cast<uint32_t> (adder);
 
       uint32_t dwndInPackets = static_cast<uint32_t> (m_dwnd / m_segmentSize);
-      dwndInPackets = static_cast<uint32_t> (std::max (0.0, static_cast<double> (dwndInPackets) - eta.Get () * diff));
+      dwndInPackets = static_cast<uint32_t> (std::max(0.0, static_cast<double>(dwndInPackets) - eta.Get() * diff));
       m_dwnd = dwndInPackets * m_segmentSize;
 
       m_cWnd = m_lwnd + m_dwnd;
@@ -204,18 +204,18 @@ TcpCompoundTest::IncreaseWindow (Ptr<TcpCompound> cong)
 }
 
 void
-TcpCompoundTest::GetSsThresh (Ptr<TcpCompound> cong)
+TcpCompoundTest::GetSsThresh(Ptr<TcpCompound> cong)
 {
   DoubleValue beta;
-  cong->GetAttribute ("Beta", beta);
+  cong->GetAttribute("Beta", beta);
 
-  uint32_t new_window = (1 - beta.Get ()) * (m_cWnd);
+  uint32_t new_window = (1 - beta.Get()) * (m_cWnd);
 
   m_lwnd = m_lwnd / 2;
 
-  m_dwnd = static_cast<uint32_t> (std::max (new_window - m_lwnd, static_cast<uint32_t> (0)));
+  m_dwnd = static_cast<uint32_t>(std::max(new_window - m_lwnd, static_cast<uint32_t> (0)));
 
-  m_ssThresh = std::max (new_window, 2 * m_segmentSize);
+  m_ssThresh = std::max(new_window, 2 * m_segmentSize);
 }
 
 
@@ -228,24 +228,66 @@ TcpCompoundTest::GetSsThresh (Ptr<TcpCompound> cong)
 class TcpCompoundTestSuite : public TestSuite
 {
 public:
-  TcpCompoundTestSuite () : TestSuite ("tcp-compound-test", UNIT)
+  TcpCompoundTestSuite() : TestSuite("tcp-compound-test", UNIT)
   {
-    AddTestCase (new TcpCompoundTest (38 * 1446, 38 * 1446, 0, 1446, 40 * 1446, MilliSeconds (106), 1, SequenceNumber32 (2893), SequenceNumber32 (5785),
-                                      "Compound test on cWnd and ssThresh when in slow start and diff > gamma"),
+    AddTestCase(new TcpCompoundTest(38 * 1446,
+                                    38 * 1446,
+                                    0,
+                                    1446,
+                                    40 * 1446,
+                                    MilliSeconds(106),
+                                    1,
+                                    SequenceNumber32(2893), 
+                                    SequenceNumber32(5785),
+                                    "Compound test on cWnd and ssThresh when in slow start and diff > gamma"),
                  TestCase::QUICK);
-    AddTestCase (new TcpCompoundTest (5 * 536, 5 * 536, 0, 536, 10 * 536, MilliSeconds (118), 1, SequenceNumber32 (3216), SequenceNumber32 (3753),
-                                      "Compound test on cWnd and ssThresh when in slow start and diff < gamma"),
+                 AddTestCase(
+                        new TcpCompoundTest(5 * 536,
+                                            5 * 536,
+                                            0,
+                                            536,
+                                            10 * 536,
+                                            MilliSeconds(118),
+                                            1,
+                                            SequenceNumber32(3216),
+                                            SequenceNumber32(3753),
+                                            "Compound test on cWnd and ssThresh when in slow start and diff < gamma"),
                  TestCase::QUICK);
-    AddTestCase (new TcpCompoundTest (60 * 346, 60 * 346, 0, 346, 40 * 346, MilliSeconds (206), 1, SequenceNumber32 (20761), SequenceNumber32 (21107),
-                                      "Compound test on cWnd and ssThresh when diff > beta"),
-                 TestCase::QUICK);
-    AddTestCase (new TcpCompoundTest (15 * 1446, 15 * 1446, 0, 1446, 10 * 1446, MilliSeconds (106), 1, SequenceNumber32 (21691), SequenceNumber32 (24583),
-                                      "Compound test on cWnd and ssThresh when diff < alpha"),
-                 TestCase::QUICK);
-    AddTestCase (new TcpCompoundTest (20 * 746, 20 * 746, 0, 746, 10 * 746, MilliSeconds (109), 1, SequenceNumber32 (14921), SequenceNumber32 (15667),
-                                      "Compound test on cWnd and ssThresh when alpha <= diff <= beta"),
+                 AddTestCase(
+                        new TcpCompoundTest(60 * 346,
+                                            60 * 346,
+                                            0,
+                                            346,
+                                            40 * 346,
+                                            MilliSeconds(206),
+                                            1,
+                                            SequenceNumber32(20761), 
+                                            SequenceNumber32(21107),
+                                            "Compound test on cWnd and ssThresh when diff > beta"),
+                        TestCase::QUICK);
+                 AddTestCase(new TcpCompoundTest(15 * 1446,
+                                                 15 * 1446,
+                                                 0,
+                                                 1446,
+                                                 10 * 1446,
+                                                 MilliSeconds(106),
+                                                 1,
+                                                 SequenceNumber32(21691),
+                                                 SequenceNumber32(24583),
+                                                 "Compound test on cWnd and ssThresh when diff < alpha"),
+                               TestCase::QUICK);
+                 AddTestCase(new TcpCompoundTest(20 * 746,
+                                                 20 * 746,
+                                                 0,
+                                                 746,
+                                                 10 * 746,
+                                                 MilliSeconds(109),
+                                                 1,
+                                                 SequenceNumber32(14921),
+                                                 SequenceNumber32(15667),
+                                                 "Compound test on cWnd and ssThresh when alpha <= diff <= beta"),
                  TestCase::QUICK);
   }
 };
 
-static TcpCompoundTestSuite g_TcpCompoundTest; //!< Static variable for test initialization
+static TcpCompoundTestSuite g_tcpCompoundTest; //!< Static variable for test initialization

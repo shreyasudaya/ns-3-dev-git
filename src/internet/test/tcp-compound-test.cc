@@ -240,7 +240,7 @@ public:
                                     SequenceNumber32(2893), 
                                     SequenceNumber32(5785),
                                     "Compound test on cWnd and ssThresh when in slow start and diff > gamma"),
-                 TestCase::QUICK);
+                 TestCase::EXTENSIVE);
                  AddTestCase(
                         new TcpCompoundTest(5 * 536,
                                             5 * 536,
@@ -252,7 +252,7 @@ public:
                                             SequenceNumber32(3216),
                                             SequenceNumber32(3753),
                                             "Compound test on cWnd and ssThresh when in slow start and diff < gamma"),
-                 TestCase::QUICK);
+                 TestCase::EXTENSIVE);
                  AddTestCase(
                         new TcpCompoundTest(60 * 346,
                                             60 * 346,
@@ -264,7 +264,7 @@ public:
                                             SequenceNumber32(20761), 
                                             SequenceNumber32(21107),
                                             "Compound test on cWnd and ssThresh when diff > beta"),
-                        TestCase::QUICK);
+                        TestCase::EXTENSIVE);
                  AddTestCase(new TcpCompoundTest(15 * 1446,
                                                  15 * 1446,
                                                  0,
@@ -275,7 +275,7 @@ public:
                                                  SequenceNumber32(21691),
                                                  SequenceNumber32(24583),
                                                  "Compound test on cWnd and ssThresh when diff < alpha"),
-                               TestCase::QUICK);
+                               TestCase::EXTENSIVE);
                  AddTestCase(new TcpCompoundTest(20 * 746,
                                                  20 * 746,
                                                  0,
@@ -286,7 +286,7 @@ public:
                                                  SequenceNumber32(14921),
                                                  SequenceNumber32(15667),
                                                  "Compound test on cWnd and ssThresh when alpha <= diff <= beta"),
-                 TestCase::QUICK);
+                 TestCase::EXTENSIVE);
   }
 };
 

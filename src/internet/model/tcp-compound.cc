@@ -344,7 +344,6 @@ TcpCompound::IncreaseWindow (Ptr<TcpSocketState> tcb, uint32_t segmentsAcked)
               uint32_t dwndInPackets = static_cast<uint32_t> (m_dwnd / tcb->m_segmentSize);
               dwndInPackets = static_cast<uint32_t> (std::max (0.0, static_cast<double> (dwndInPackets) - m_eta * diff));
               m_dwnd = dwndInPackets * tcb->m_segmentSize;
-
               tcb->m_cWnd = m_lwnd + m_dwnd;
             }
 

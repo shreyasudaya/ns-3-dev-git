@@ -126,7 +126,7 @@ public:
    */
   virtual uint32_t GetSsThresh (Ptr<const TcpSocketState> tcb,
                                 uint32_t bytesInFlight);
-
+  //virtual uint32_t GetAdvertisedWindow (bool scale);
   virtual Ptr<TcpCongestionOps> Fork ();
 
 protected:
@@ -157,6 +157,7 @@ private:
   double m_lamda;                                               //!< Weight assigned to new sample in gamma calculation
   uint32_t m_lwnd;                  //!< Locally maintained loss-based congestion window
   uint32_t m_dwnd;                  //!< Locally maintained delay-based congestion window
+  uint32_t m_awnd;                  //Advertised window
   uint32_t m_diffReno;                          //!< diff value calculated for gamma autotuning
   bool m_diffRenoValid;      //!< If true, do gamma autotuning upon loss
 

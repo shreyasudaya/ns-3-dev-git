@@ -23,9 +23,10 @@
 #ifndef TCPCompound_H
 #define TCPCompound_H
 
-#include "ns3/tcp-congestion-ops.h"
+#include "tcp-congestion-ops.h"
 
-namespace ns3 {
+namespace ns3 
+{
 
 /**
  * \ingroup congestionOps
@@ -55,7 +56,7 @@ namespace ns3 {
  *
  * More information: http://dx.doi.org/10.1109/49.464716
  */
-
+class TcpSocketState;
 class TcpCompound : public TcpNewReno
 {
 public:
@@ -63,21 +64,21 @@ public:
    * \brief Get the type ID.
    * \return the object TypeId
    */
-  static TypeId GetTypeId (void);
+  static TypeId GetTypeId();
 
   /**
    * Create an unbound tcp socket.
    */
-  TcpCompound (void);
+  TcpCompound();
 
   /**
    * \brief Copy constructor
    * \param sock the object to copy
    */
-  TcpCompound (const TcpCompound& sock);
-  virtual ~TcpCompound (void);
+  TcpCompound(const TcpCompound& sock);
+  ~TcpCompound() override;
 
-  virtual std::string GetName () const;
+   std::string GetName() const override;
 
   /**
    * \brief Compute RTTs needed to execute Compound algorithm
@@ -94,8 +95,7 @@ public:
    * \param rtt last RTT
    *
    */
-  virtual void PktsAcked (Ptr<TcpSocketState> tcb, uint32_t segmentsAcked,
-                          const Time& rtt);
+  virtual void PktsAcked(Ptr<TcpSocketState> tcb, uint32_t segmentsAcked,const Time& rtt) override;
 
   /**
    * \brief Enable/disable Compound algorithm depending on the congestion state
@@ -105,8 +105,8 @@ public:
    * \param tcb internal congestion state
    * \param newState new congestion state to which the TCP is going to switch
    */
-  virtual void CongestionStateSet (Ptr<TcpSocketState> tcb,
-                                   const TcpSocketState::TcpCongState_t newState);
+  virtual void CongestionStateSet(Ptr<TcpSocketState> tcb,
+                                   const TcpSocketState::TcpCongState_t newState) override;
 
   /**
    * \brief Adjust cwnd following Compound linear increase/decrease algorithm
@@ -114,7 +114,7 @@ public:
    * \param tcb internal congestion state
    * \param segmentsAcked count of segments ACKed
    */
-  virtual void IncreaseWindow (Ptr<TcpSocketState> tcb, uint32_t segmentsAcked);
+  virtual void IncreaseWindow(Ptr<TcpSocketState> tcb, uint32_t segmentsAcked) override;
 
   /**
    * \brief Get slow start threshold following Compound principle
@@ -124,10 +124,9 @@ public:
    *
    * \return the slow start threshold value
    */
-  virtual uint32_t GetSsThresh (Ptr<const TcpSocketState> tcb,
-                                uint32_t bytesInFlight);
+  uint32_t GetSsThresh(Ptr<const TcpSocketState> tcb, uint32_t bytesInFlight) override;
   //virtual uint32_t GetAdvertisedWindow (bool scale);
-  virtual Ptr<TcpCongestionOps> Fork ();
+  Ptr<TcpCongestionOps> Fork () override;
 
 protected:
 private:
@@ -142,12 +141,12 @@ private:
    *
    * \param tcb internal congestion state
    */
-  void EnableCompound (Ptr<TcpSocketState> tcb);
+  void EnableCompound(Ptr<TcpSocketState> tcb);
 
   /**
    * \brief Stop taking Compound samples
    */
-  void DisableCompound ();
+  void DisableCompound();
 
 private:
   double m_alpha;                                       //!< Parameter used in multiplicative increase

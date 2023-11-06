@@ -141,8 +141,7 @@ TcpCompoundTest::DoRun()
   // Our calculation of cwnd
   IncreaseWindow(cong);
 
-  NS_TEST_ASSERT_MSG_EQ(m_state->m_cWnd.Get(), m_cWnd,
-                         "CWnd has not updated correctly");
+  NS_TEST_ASSERT_MSG_EQ(m_state->m_cWnd.Get(), m_cWnd, "CWnd has not updated correctly");
   NS_TEST_ASSERT_MSG_EQ(m_state->m_ssThresh.Get(), m_ssThresh,
                          "SsThresh has not updated correctly");
 }
@@ -203,8 +202,7 @@ TcpCompoundTest::IncreaseWindow(Ptr<TcpCompound> cong)
     }
 }
 
-void
-TcpCompoundTest::GetSsThresh(Ptr<TcpCompound> cong)
+void TcpCompoundTest::GetSsThresh(Ptr<TcpCompound> cong)
 {
   DoubleValue beta;
   cong->GetAttribute("Beta", beta);
@@ -228,7 +226,7 @@ TcpCompoundTest::GetSsThresh(Ptr<TcpCompound> cong)
 class TcpCompoundTestSuite : public TestSuite
 {
 public:
-  TcpCompoundTestSuite() : TestSuite("tcp-compound-test", UNIT)
+  TcpCompoundTestSuite():TestSuite("tcp-compound-test", UNIT)
   {
     AddTestCase(new TcpCompoundTest(38 * 1446,
                                     38 * 1446,
@@ -240,9 +238,8 @@ public:
                                     SequenceNumber32(2893), 
                                     SequenceNumber32(5785),
                                     "Compound test on cWnd and ssThresh when in slow start and diff > gamma"),
-                 TestCase::EXTENSIVE);
-                 AddTestCase(
-                        new TcpCompoundTest(5 * 536,
+                 TestCase::QUICK);
+    AddTestCase(new TcpCompoundTest(5 * 536,
                                             5 * 536,
                                             0,
                                             536,
@@ -252,9 +249,8 @@ public:
                                             SequenceNumber32(3216),
                                             SequenceNumber32(3753),
                                             "Compound test on cWnd and ssThresh when in slow start and diff < gamma"),
-                 TestCase::EXTENSIVE);
-                 AddTestCase(
-                        new TcpCompoundTest(60 * 346,
+                 TestCase::QUICK);
+     AddTestCase(new TcpCompoundTest(60 * 346,
                                             60 * 346,
                                             0,
                                             346,
@@ -264,8 +260,8 @@ public:
                                             SequenceNumber32(20761), 
                                             SequenceNumber32(21107),
                                             "Compound test on cWnd and ssThresh when diff > beta"),
-                        TestCase::EXTENSIVE);
-                 AddTestCase(new TcpCompoundTest(15 * 1446,
+                        TestCase::QUICK);
+     AddTestCase(new TcpCompoundTest(15 * 1446,
                                                  15 * 1446,
                                                  0,
                                                  1446,
@@ -275,8 +271,8 @@ public:
                                                  SequenceNumber32(21691),
                                                  SequenceNumber32(24583),
                                                  "Compound test on cWnd and ssThresh when diff < alpha"),
-                               TestCase::EXTENSIVE);
-                 AddTestCase(new TcpCompoundTest(20 * 746,
+                               TestCase::QUICK);
+     AddTestCase(new TcpCompoundTest(20 * 746,
                                                  20 * 746,
                                                  0,
                                                  746,
@@ -286,7 +282,8 @@ public:
                                                  SequenceNumber32(14921),
                                                  SequenceNumber32(15667),
                                                  "Compound test on cWnd and ssThresh when alpha <= diff <= beta"),
-                 TestCase::EXTENSIVE);
+                 TestCase::QUICK);
+                 
   }
 };
 
